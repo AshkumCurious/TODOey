@@ -29,21 +29,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   //text controller
-  final controller = TextEditingController();
+  final taskcontroller = TextEditingController();
+  final descontroller = TextEditingController();
 
 
   void checkBoxChanged(bool? value, int index)
   {
     setState(() {
-      db.toDoList[index][1] = !db.toDoList[index][1];
+      db.toDoList[index][2] = !db.toDoList[index][2];
     });
     db.updateData();
   }
 
   void saveNewTask(){
+
     setState(() {
-      db.toDoList.add([controller.text,false]);
-      controller.clear();
+      final now = DateTime.parse(DateTime.now().toString());
+      String tdnow = now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString()+"  "+now.hour.toString() + ":" + now.minute.toString();
+      db.toDoList.add([taskcontroller.text,descontroller.text,false,tdnow,]);
+      taskcontroller.clear();
+      descontroller.clear();
     });
     Navigator.of(context).pop();
     db.updateData();
@@ -54,7 +59,8 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return DialogBox(
-            controller: controller,
+            taskcontroller: taskcontroller,
+            descontroller: descontroller,
             onSave: saveNewTask,
             onCancel: () => Navigator.of(context).pop(),
           );
@@ -69,40 +75,121 @@ class _HomePageState extends State<HomePage> {
     db.updateData();
   }
 
+  int completeTask()
+  {
+    int c=0;
+    for(int i=0;i<db.toDoList.length;i++)
+      {
+        if(db.toDoList[i][2]==true)
+          c++;
+      }
+    return c;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          title: Center(
-            child: Text('TO DO         '),
-          ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: createNewTask,
-        child: Icon(Icons.add,),
-      ),
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('lib/images/TODOEYlogo.png'),
-          fit: BoxFit.contain,
-          )
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: [0.5, 0.7, 0.4, 0.3],
+          colors: [
+            Colors.grey.shade900,
+            Colors.grey.shade900,
+            Colors.grey.shade800,
+            Colors.grey.shade800,
+          ],
         ),
-        child: ListView.builder(
-          itemCount: db.toDoList.length,
-          itemBuilder: (context,index)
-          {
-            return ToDoTile(
-                taskName: db.toDoList[index][0],
-                taskCompleted: db.toDoList[index][1],
-                onChanged: (value) => checkBoxChanged(value, index),
-              deleteFunction: (context) => deleteTask(index),
-            );
-          },
+      ),
+      child: Scaffold(
+        backgroundColor: Color(0x00000000),
+        appBar: AppBar(
+            title: Text('TO DO '),
+        ),
+        endDrawer: Drawer(
+          backgroundColor: Colors.deepPurple.shade100,
+           child: Column(
+           //  crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Container(
+                 height: 330.0,
+                 width: double.infinity,
+                 color: Colors.deepPurple,
+                 child: Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                   children: [
+                     Icon(Icons.person,
+                     size: 250.0,
+                     ),
+                     Text(" Hello!",
+                     style: TextStyle(
+                       fontSize: 35.0,
+                       fontWeight: FontWeight.bold,
+                     ),
+                     ),
+                     Text("  User",
+                       style: TextStyle(
+                         fontSize: 20.0,
+                        // fontWeight: FontWeight.bold,
+                       ),
+                     ),
+                   ],
+                 ),
+               ),
+               SizedBox(
+                 height: 40.0,
+               ),
+               Text("Total Tasks: "+db.toDoList.length.toString(),
+               style: TextStyle(
+                 fontSize: 25.0,
+                 fontWeight: FontWeight.w500,
 
+               ),
+               ),
+               SizedBox(
+                 height: 10.0,
+               ),
+               Text("Tasks Completed: " + completeTask().toString(),
+                 style: TextStyle(
+                   fontSize: 25.0,
+                   fontWeight: FontWeight.w500,
+                 ),
+               ),
+               SizedBox(
+                 height: 10.0,
+               ),
+               Text("Tasks Pending: " + (db.toDoList.length-completeTask()).toString(),
+                 style: TextStyle(
+                   fontSize: 25.0,
+                   fontWeight: FontWeight.w500,
+                 ),
+               ),
+             ],
+
+           ),
         ),
-      )
+        floatingActionButton: FloatingActionButton(
+            onPressed: createNewTask,
+          child: Icon(Icons.add,),
+        ),
+        body: ListView.builder(
+            itemCount: db.toDoList.length,
+            itemBuilder: (context,index)
+            {
+              return ToDoTile(
+                  taskName: db.toDoList[index][0],
+                  des: db.toDoList[index][1],
+                  taskCompleted: db.toDoList[index][2],
+                  onChanged: (value) => checkBoxChanged(value, index),
+                  deleteFunction: (context) => deleteTask(index),
+                  datetime:db.toDoList[index][3],
+              );
+            },
+          ),
+        ),
     );
   }
 }

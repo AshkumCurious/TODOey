@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todoey/auth/login_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,16 +24,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       home: EasySplashScreen(
-        logo: Image.asset('lib/images/TODOEYlogo.png',
+        logo: Image.asset('lib/images/TODOEY_logo_withoutBG.png',
         ),
         logoWidth: 200.0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.deepPurple.shade400,
         showLoader: true,
         loadingText: Text("Loading..."),
         navigator: LoginPage(),
-        durationInSeconds: 5,
+        durationInSeconds: 2,
       ),
-      theme: ThemeData(primarySwatch: Colors.yellow),
+      theme: ThemeData(primarySwatch:Colors.deepPurple),
     );
   }
 }

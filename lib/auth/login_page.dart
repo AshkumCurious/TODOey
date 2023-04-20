@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
+import 'package:todoey/auth/register_page.dart';
 import 'package:todoey/components/square_tile.dart';
 import 'package:todoey/components/my_buttons.dart';
 import 'package:todoey/components/my_textfield.dart';
 import 'package:todoey/home_page.dart';
-
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   // text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+
 
   // sign user in method
   void signUserIn(BuildContext context) {
@@ -31,11 +31,11 @@ class LoginPage extends StatelessWidget {
                Navigator.of(ctx).pop();
               },
              child: Container(
-              color: Colors.yellow[400],
+              color: Colors.deepPurple[400],
              padding: const EdgeInsets.all(14),
              child: const Text("okay",
              style: TextStyle(
-               color: Colors.grey,
+               color: Colors.white,
              ),
              ),
             ),
@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[200],
+      backgroundColor: Colors.deepPurple.shade400,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                 Text(
                   'Welcome back you\'ve been missed!',
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.black54,
                     fontSize: 16,
                   ),
                 ),
@@ -103,7 +103,7 @@ class LoginPage extends StatelessWidget {
                     children: [
                       Text(
                         'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Colors.grey[900]),
                       ),
                     ],
                   ),
@@ -133,7 +133,7 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(color: Colors.black54),
                         ),
                       ),
                       Expanded(
@@ -166,14 +166,22 @@ class LoginPage extends StatelessWidget {
                   children: [
                     Text(
                       'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
+                      style: TextStyle(color: Colors.black),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterPage()),
+                        );
+                      },
+                      child: const Text(
+                        'Register now',
+                        style: TextStyle(
+                          color: Colors.yellow,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
